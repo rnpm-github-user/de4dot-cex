@@ -20,8 +20,6 @@ jobs:
     - uses: actions/checkout@v1
     - name: Build
       run: |
-        $msbuildPath = Split-Path (& "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -requires Microsoft.Component.MSBuild -find MSBuild\Current\Bin\amd64\MSBuild.exe | Select-Object -First 1) -Parent
-        $env:PATH = $msbuildPath + ';' + $env:PATH
         git submodule update --init --recursive
         nuget restore de4dot.sln
         msbuild de4dot.sln /p:Configuration=Release /m /verbosity:normal /p:WarningLevel=0
@@ -30,7 +28,7 @@ jobs:
       if: startsWith(github.ref, 'refs/tags/')
       with:
         name: de4dot-cex
-        path: Release/bin
+        path: Release
     
     - name: Create ZIP
       if: startsWith(github.ref, 'refs/tags/')
